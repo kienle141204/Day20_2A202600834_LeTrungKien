@@ -14,6 +14,22 @@ from multi_agent_research_lab.core.config import Settings, get_settings
 _MOCK_INPUT_COST_PER_1K = 0.0005
 _MOCK_OUTPUT_COST_PER_1K = 0.0015
 
+# Published OpenAI pricing (USD per 1M tokens) for models this lab is expected to use.
+_OPENAI_PRICE_PER_1M_TOKENS: dict[str, tuple[float, float]] = {
+    "gpt-4o-mini": (0.15, 0.60),
+    "gpt-4o": (2.50, 10.00),
+}
+
+
+def _estimate_openai_cost(
+    model: str, input_tokens: int | None, output_tokens: int | None
+) -> float | None:
+    pricing = _OPENAI_PRICE_PER_1M_TOKENS.get(model)
+    if pricing is None or input_tokens is None or output_tokens is None:
+        return None
+    input_price, output_price = pricing
+    return input_tokens / 1_000_000 * input_price + output_tokens / 1_000_000 * output_price
+
 
 @dataclass(frozen=True)
 class LLMResponse:
@@ -95,9 +111,12 @@ class LLMClient:
         )
         choice = response.choices[0].message.content or ""
         usage = response.usage
+        input_tokens = usage.prompt_tokens if usage else None
+        output_tokens = usage.completion_tokens if usage else None
+        cost_usd = _estimate_openai_cost(self._settings.openai_model, input_tokens, output_tokens)
         return LLMResponse(
             content=choice,
-            input_tokens=usage.prompt_tokens if usage else None,
-            output_tokens=usage.completion_tokens if usage else None,
-            cost_usd=None,
+            input_tokens=input_tokens,
+            output_tokens=output_tokens,
+            cost_usd=cost_usd,
         )

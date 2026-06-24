@@ -26,6 +26,11 @@ class SupervisorAgent(BaseAgent):
             next_route = "analyst"
         elif state.final_answer is None:
             next_route = "writer"
+        elif state.critic_passed is None:
+            next_route = "critic"
+        elif state.critic_passed is False and state.revision_count < self._settings.max_revisions:
+            state.revision_count += 1
+            next_route = "writer"
         else:
             next_route = DONE
 

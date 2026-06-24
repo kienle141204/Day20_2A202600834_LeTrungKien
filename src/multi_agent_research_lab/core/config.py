@@ -25,9 +25,16 @@ class Settings(BaseSettings):
         default="multi-agent-research-lab", validation_alias="LANGSMITH_PROJECT"
     )
 
+    langfuse_public_key: str | None = Field(default=None, validation_alias="LANGFUSE_PUBLIC_KEY")
+    langfuse_secret_key: str | None = Field(default=None, validation_alias="LANGFUSE_SECRET_KEY")
+    langfuse_host: str = Field(
+        default="https://cloud.langfuse.com", validation_alias="LANGFUSE_HOST"
+    )
+
     tavily_api_key: str | None = Field(default=None, validation_alias="TAVILY_API_KEY")
 
-    max_iterations: int = Field(default=6, ge=1, le=20, validation_alias="MAX_ITERATIONS")
+    max_iterations: int = Field(default=8, ge=1, le=20, validation_alias="MAX_ITERATIONS")
+    max_revisions: int = Field(default=1, ge=0, le=3, validation_alias="MAX_REVISIONS")
     timeout_seconds: int = Field(default=60, ge=5, le=600, validation_alias="TIMEOUT_SECONDS")
 
 

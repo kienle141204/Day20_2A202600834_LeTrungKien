@@ -23,6 +23,10 @@ class ResearchState(BaseModel):
     analysis_notes: str | None = None
     final_answer: str | None = None
 
+    critic_passed: bool | None = None
+    critic_findings: list[str] = Field(default_factory=list)
+    revision_count: int = 0
+
     agent_results: list[AgentResult] = Field(default_factory=list)
     trace: list[dict[str, Any]] = Field(default_factory=list)
     errors: list[str] = Field(default_factory=list)

@@ -48,7 +48,9 @@ Supervisor kiểm tra theo thứ tự:
 
 ## Guardrails
 
-- Max iterations: `Settings.max_iterations` (mặc định 6) — Supervisor ép `done` khi vượt ngưỡng.
+- Max iterations: `Settings.max_iterations` (mặc định 8) — Supervisor ép `done` khi vượt ngưỡng;
+  đủ chỗ cho 1 vòng đầy đủ (researcher→analyst→writer→critic) + 1 lần Writer sửa lại theo
+  feedback của Critic (`Settings.max_revisions`, mặc định 1).
 - Timeout: `Settings.timeout_seconds` (mặc định 60) — dự kiến áp ở tầng gọi LLM/search.
 - Retry: `LLMClient` dùng `tenacity` retry 3 lần với exponential backoff cho mỗi lần gọi.
 - Fallback: nếu một worker raise exception, workflow ghi lỗi vào `state.errors` và dừng vòng lặp

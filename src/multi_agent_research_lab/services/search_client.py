@@ -3,6 +3,9 @@
 from multi_agent_research_lab.core.config import Settings, get_settings
 from multi_agent_research_lab.core.schemas import SourceDocument
 
+# Tavily rejects queries longer than this with "Query is too long".
+_TAVILY_MAX_QUERY_LENGTH = 400
+
 
 class SearchClient:
     """Provider-agnostic search client.
@@ -47,7 +50,7 @@ class SearchClient:
         from tavily import TavilyClient
 
         client = TavilyClient(api_key=self._settings.tavily_api_key)
-        response = client.search(query=query, max_results=max_results)
+        response = client.search(query=query[:_TAVILY_MAX_QUERY_LENGTH], max_results=max_results)
         return [
             SourceDocument(
                 title=result.get("title", ""),
