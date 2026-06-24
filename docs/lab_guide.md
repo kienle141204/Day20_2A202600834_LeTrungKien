@@ -22,7 +22,8 @@ File gợi ý:
 - `src/multi_agent_research_lab/cli.py`
 - `src/multi_agent_research_lab/services/llm_client.py`
 
-TODO(student): thay baseline placeholder bằng một call LLM thật.
+Đã hoàn thành: `cli.py baseline` gọi `LLMClient.complete` một lần (mock backend mặc định,
+có seam cắm OpenAI thật qua `OPENAI_API_KEY`) để research+analyze+write trong một bước.
 
 ## Milestone 2: Supervisor
 
@@ -31,7 +32,8 @@ File gợi ý:
 - `src/multi_agent_research_lab/agents/supervisor.py`
 - `src/multi_agent_research_lab/graph/workflow.py`
 
-TODO(student): implement routing policy.
+Đã hoàn thành: `SupervisorAgent` route theo field còn thiếu (`research_notes` →
+`analysis_notes` → `final_answer` → `done`), enforce `max_iterations` làm guardrail.
 
 Gợi ý câu hỏi thiết kế:
 
@@ -49,7 +51,8 @@ File gợi ý:
 - `agents/analyst.py`
 - `agents/writer.py`
 
-TODO(student): implement từng worker.
+Đã hoàn thành: Researcher (search + tóm tắt), Analyst (rút key claims), Writer
+(tổng hợp final answer có trích nguồn) — mỗi agent nhận `LLMClient`/`SearchClient` qua constructor.
 
 ## Milestone 4: Trace và benchmark
 
